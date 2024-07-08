@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <functional>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <cstring>
 
@@ -441,6 +442,11 @@ public:
         auto temp{*this};
         ++(*this);
         return temp;
+    }
+
+    // returns current position of iterator in format {Bucket number, Index in Bucker}, for debugging
+    std::pair<unsigned, unsigned> get_pos() const {
+        return {b, idx};
     }
 
     friend bool operator==(const Iterator &lhs, const Iterator &rhs) {
