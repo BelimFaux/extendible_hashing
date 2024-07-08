@@ -36,3 +36,5 @@ Extendible Hashing <j,4>, d = 2, nD = 4, sz = 9
 1 --> [l = 1, offset = 2, arrsz = 3 | 31 7 9 ]  
 2 --> [l = 2, offset = 4, arrsz = 3 | 6 22 10 ]  
 3 ~~> 1 --> [l = 1, offset = 2, arrsz = 3 | 31 7 9 ]  
+
+Image from [https://media.geeksforgeeks.org/wp-content/uploads/20190803222615/hash73.png](https://media.geeksforgeeks.org/wp-content/uploads/20190803222615/hash73.png)
