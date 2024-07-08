@@ -26,8 +26,8 @@ g++ -DNVERB extendible_hashing.cpp -o extendible_hashing
 If the Program isn't compiled nonverbose, after every change to the Set, it will be printed out.  
 The Format for printing is definde by the `dump()` method, and includes every Directory, and the Bucket that it points to (-> if its the only (or first) Directory pointing to that Bucket, or ~> followed by the first Directory, pointing to that Bucket else) as well as the Elements inside the Buckets and info like size, offset, local/global depth etc.
 
-For example:  
-A Set like this:
+For example a Set like this:  
+  
 ![https://media.geeksforgeeks.org/wp-content/uploads/20190803222615/hash73.png](hash73.png "Example")
 
 might look like this:
