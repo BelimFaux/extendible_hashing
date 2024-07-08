@@ -38,10 +38,10 @@ void find(set *set) {
     while (inp_stream >> i) {
         set::iterator it{set->find(i)};
         if (it == set->end())
-            std::cout << "Element not found";
+            std::cout << i << ": element not found";
         else {
             auto pos{it.get_pos()};
-            std::cout << "bucket: " << pos.first << ", index: " << pos.second;
+            std::cout << i << ": bucket: " << pos.first << ", index: " << pos.second;
         }
         std::cout << '\n';
     }
