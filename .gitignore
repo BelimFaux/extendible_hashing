@@ -30,4 +30,4 @@
 *.exe
 *.out
 *.app
-extendible_hashing
+build/*

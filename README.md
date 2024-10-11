@@ -4,27 +4,40 @@ This is a C++ Implementation of an Extendible Hashing Set.
 It was originally written for the ADS-Course of University of Vienna.
 
 ## Setup
-To try the Set out, a Testprogram is provided (that is heavily influenced by a Testprogram from the University Course).
+To try the Set out, a testprogram is provided (that is heavily influenced by a testprogram from the university course).
 To run the Program, just compile the file `extendible_hashing.cpp` and run it:
 ```bash
-g++ extendible_hashing.cpp -o extendible_hashing
+cd build
+cmake .. && make
 ./extendible_hashing
 ```
-You can set a custom bucket size by defining SIZE. The standard Bucket size is 16
+You can also set the program to nonverbose by setting the -v flag
 ```bash
-g++ -DSIZE=4 extendible_hashing.cpp -o extendible_hashing
-./extendible_hashing
+./extendible_hashing -v
 ```
-You can also set the program to nonverbose by defining NVERB
-```bash
-g++ -DNVERB extendible_hashing.cpp -o extendible_hashing
-./extendible_hashing
 
+## Interface
+The Program launches into a prompt, from there you have multiple commands to modify or inspect the set:
+- i - insert elements in set
+- r - remove elements from set
+- f - find elements in set
+- l - list all elements in set (using foreach loop)
+- s - show size of set
+- c - clear set
+- p - print current set
+- h - show help page
+- q (or EOF) - quit
+Commands like insert, remove and find, that require more input will launch a second prompt where you can type in as much elements as you would like, seperated by spaces:
 ```
+input> 1 2 3 4 5
+Extendible Hashing <j,16>, d = 0, nD = 1, sz = 5
+0 --> [l = 0, offset = 1, arrsz = 5 | 1 2 3 4 5 ]
+```
+After executing commands that alter the set the set will be printed, if the Program isn't set to nonverbose (see Output)
 
 ## Output
-If the Program isn't compiled nonverbose, after every change to the Set, it will be printed out.  
-The Format for printing is definde by the `dump()` method, and includes every Directory, and the Bucket that it points to (-> if its the only (or first) Directory pointing to that Bucket, or ~> followed by the first Directory, pointing to that Bucket else) as well as the Elements inside the Buckets and info like size, offset, local/global depth etc.
+If the Program isn't run nonverbose, after every change to the Set, it will be printed out.  
+The Format for printing is definde by the `dump()` method, and includes every directory, and the bucket that it points to (-> if its the only (or first) Directory pointing to that Bucket, or ~> followed by the first Directory, pointing to that Bucket else) as well as the Elements inside the Buckets and info like size, offset, local/global depth etc.
 
 For example a Set like this:  
   

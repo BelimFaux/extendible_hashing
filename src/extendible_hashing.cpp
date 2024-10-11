@@ -1,13 +1,18 @@
 #include "EH_set.h"
+#include <cstdlib>
 #include <sstream>
 #include <string>
 #include <iostream>
 
-#ifdef SIZE
-using set = EH_set<unsigned, SIZE>;
-#else
-using set = EH_set<unsigned>;
+#ifndef PROG_NAME
+#define PROG_NAME "<undefined>"
 #endif
+
+#ifndef PROG_VERSION
+#define PROG_VERSION "<undefined>"
+#endif
+
+using set = EH_set<unsigned>;
 
 std::istringstream get_input() {
     std::string inp;
@@ -47,10 +52,37 @@ void find(set *set) {
     }
 }
 
+bool cmd_option_exists(char** begin, char** end, const std::string& option) {
+    return std::find(begin, end, option) != end;
+}
 
-int main() {
+void print_version() {
+    std::cout << PROG_NAME << " " << PROG_VERSION << "\n";
+}
+
+void print_usage() {
+    print_version();
+    std::cout << "\nUsage:\n" <<
+        PROG_NAME << " [options]\n" <<
+        "\nOptions:\n" <<
+        "   -h     Print this help\n" <<
+        "   -v     Toggle verbose output. (default: true)\n" <<
+        "   -V     Print the program version\n";
+}
+
+int main(int argc, char** argv) {
     set set;
     bool changed;
+    bool verbose{!cmd_option_exists(argv, argv + argc, "-v")};
+
+    if (cmd_option_exists(argv, argv + argc, "-h"))  {
+        print_usage();
+        return EXIT_SUCCESS;
+    }
+    if (cmd_option_exists(argv, argv + argc, "-V")) {
+        print_version();
+        return EXIT_SUCCESS;
+    }
 
     std::string line;
     while (std::cout << "cmd> ", std::getline(std::cin, line)) {
@@ -103,11 +135,10 @@ int main() {
             default:
                 std::cout << "unknown command\n";
         }
-    #ifndef NVERB
-        if (changed)
-            set.dump();
-    #endif
+
+    if (verbose && changed)
+        set.dump();
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
