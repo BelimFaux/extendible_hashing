@@ -1,8 +1,8 @@
 #include "EH_set.h"
 #include <cstdlib>
+#include <iostream>
 #include <sstream>
 #include <string>
-#include <iostream>
 
 #ifndef PROG_NAME
 #define PROG_NAME "<undefined>"
@@ -46,36 +46,35 @@ void find(set *set) {
             std::cout << i << ": element not found";
         else {
             auto pos{it.get_pos()};
-            std::cout << i << ": bucket: " << pos.first << ", index: " << pos.second;
+            std::cout << i << ": bucket: " << pos.first
+                      << ", index: " << pos.second;
         }
         std::cout << '\n';
     }
 }
 
-bool cmd_option_exists(char** begin, char** end, const std::string& option) {
+bool cmd_option_exists(char **begin, char **end, const std::string &option) {
     return std::find(begin, end, option) != end;
 }
 
-void print_version() {
-    std::cout << PROG_NAME << " " << PROG_VERSION << "\n";
-}
+void print_version() { std::cout << PROG_NAME << " " << PROG_VERSION << "\n"; }
 
 void print_usage() {
     print_version();
-    std::cout << "\nUsage:\n" <<
-        PROG_NAME << " [options]\n" <<
-        "\nOptions:\n" <<
-        "   -h     Print this help\n" <<
-        "   -v     Toggle verbose output. (default: true)\n" <<
-        "   -V     Print the program version\n";
+    std::cout << "\nUsage:\n"
+              << PROG_NAME << " [options]\n"
+              << "\nOptions:\n"
+              << "   -h     Print this help\n"
+              << "   -v     Toggle verbose output. (default: true)\n"
+              << "   -V     Print the program version\n";
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     set set;
     bool changed;
     bool verbose{!cmd_option_exists(argv, argv + argc, "-v")};
 
-    if (cmd_option_exists(argv, argv + argc, "-h"))  {
+    if (cmd_option_exists(argv, argv + argc, "-h")) {
         print_usage();
         return EXIT_SUCCESS;
     }
@@ -92,52 +91,52 @@ int main(int argc, char** argv) {
         line_stream >> cmd;
 
         switch (cmd) {
-            case 'i':
-                input(&set);
-                changed = true;
-                break;
-            case 'r':
-                remove(&set);
-                changed = true;
-                break;
-            case 'f':
-                find(&set);
-                break;
-            case 'l':
-                for (unsigned i: set)
-                    std::cout << i << " ";
-                std::cout << '\n';
-                break;
-            case 's':
-                std::cout << set.size() << '\n';
-                break;
-            case 'c':
-                set.clear();
-                changed = true;
-                break;
-            case 'p':
-                set.dump();
-                break;
-            case 'h':
-                std::cout << "Help\n"
-                          << "  i - insert elements in set\n"
-                          << "  r - remove elements from set\n"
-                          << "  f - find elements in set\n"
-                          << "  l - list all elements in set (using foreach loop)\n"
-                          << "  s - show size of set\n"
-                          << "  c - clear set\n"
-                          << "  p - print current set\n"
-                          << "  h - show help page (this screen)\n"
-                          << "  q (or EOF) - quit\n";
-                break;
-            case 'q':
-                return 0;
-            default:
-                std::cout << "unknown command\n";
+        case 'i':
+            input(&set);
+            changed = true;
+            break;
+        case 'r':
+            remove(&set);
+            changed = true;
+            break;
+        case 'f':
+            find(&set);
+            break;
+        case 'l':
+            for (unsigned i : set)
+                std::cout << i << " ";
+            std::cout << '\n';
+            break;
+        case 's':
+            std::cout << set.size() << '\n';
+            break;
+        case 'c':
+            set.clear();
+            changed = true;
+            break;
+        case 'p':
+            set.dump();
+            break;
+        case 'h':
+            std::cout << "Help\n"
+                      << "  i - insert elements in set\n"
+                      << "  r - remove elements from set\n"
+                      << "  f - find elements in set\n"
+                      << "  l - list all elements in set (using foreach loop)\n"
+                      << "  s - show size of set\n"
+                      << "  c - clear set\n"
+                      << "  p - print current set\n"
+                      << "  h - show help page (this screen)\n"
+                      << "  q (or EOF) - quit\n";
+            break;
+        case 'q':
+            return 0;
+        default:
+            std::cout << "unknown command\n";
         }
 
-    if (verbose && changed)
-        set.dump();
+        if (verbose && changed)
+            set.dump();
     }
 
     return EXIT_SUCCESS;
