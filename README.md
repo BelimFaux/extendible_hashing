@@ -4,20 +4,26 @@ This is a C++ Implementation of an Extendible Hashing Set.
 It was originally written for the ADS-Course of University of Vienna.
 
 ## Setup
+
 To try the Set out, a testprogram is provided (that is heavily influenced by a testprogram from the university course).
 To run the Program, just compile the file `extendible_hashing.cpp` and run it:
+
 ```bash
-cd build
+mkdir build && cd build
 cmake .. && make
 ./extendible_hashing
 ```
+
 You can also set the program to nonverbose by setting the -v flag
+
 ```bash
 ./extendible_hashing -v
 ```
 
 ## Interface
+
 The Program launches into a prompt, from there you have multiple commands to modify or inspect the set:
+
 - i - insert elements in set
 - r - remove elements from set
 - f - find elements in set
@@ -27,15 +33,19 @@ The Program launches into a prompt, from there you have multiple commands to mod
 - p - print current set
 - h - show help page
 - q (or EOF) - quit
+
 Commands like insert, remove and find, that require more input will launch a second prompt where you can type in as much elements as you would like, seperated by spaces:
+
 ```
 input> 1 2 3 4 5
 Extendible Hashing <j,16>, d = 0, nD = 1, sz = 5
 0 --> [l = 0, offset = 1, arrsz = 5 | 1 2 3 4 5 ]
 ```
+
 After executing commands that alter the set the set will be printed, if the Program isn't set to nonverbose (see Output)
 
 ## Output
+
 If the Program isn't run nonverbose, after every change to the Set, it will be printed out.  
 The Format for printing is definde by the `dump()` method, and includes every directory, and the bucket that it points to (-> if its the only (or first) Directory pointing to that Bucket, or ~> followed by the first Directory, pointing to that Bucket else) as well as the Elements inside the Buckets and info like size, offset, local/global depth etc.
 
