@@ -6,7 +6,7 @@ It was originally written for the ADS-Course of University of Vienna.
 ## Setup
 
 To try the Set out, a testprogram is provided (that is heavily influenced by a testprogram from the university course).
-To run the Program, just compile the file `extendible_hashing.cpp` and run it:
+To run the Program, compile the file `extendible_hashing.cpp` using CMake and run it:
 
 ```bash
 mkdir build && cd build
@@ -14,10 +14,17 @@ cmake .. && make
 ./extendible_hashing
 ```
 
-You can also set the program to nonverbose by setting the -v flag
+You can also set the program to nonverbose by setting the verbose flag
 
 ```bash
 ./extendible_hashing -v
+./extendible_hashing --verbose
+```
+
+For more Information run
+```bash
+./extendible_hashing -h
+./extendible_hashing --help
 ```
 
 ## Interface
@@ -46,7 +53,7 @@ After executing commands that alter the set the set will be printed, if the Prog
 
 ## Output
 
-If the Program isn't run nonverbose, after every change to the Set, it will be printed out.  
+If the Program isn't run nonverbose, after every change to the Set, it will be printed out (equivalent to running `p`).  
 The Format for printing is definde by the `dump()` method, and includes every directory, and the bucket that it points to (-> if its the only (or first) Directory pointing to that Bucket, or ~> followed by the first Directory, pointing to that Bucket else) as well as the Elements inside the Buckets and info like size, offset, local/global depth etc.
 
 For example a Set like this:  
