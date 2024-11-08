@@ -6,8 +6,7 @@ It was originally written for the ADS-Course of University of Vienna.
 ## Setup
 
 To try the Set out, a testprogram is provided (that is heavily influenced by a testprogram from the university course).
-To run the Program, compile the file `eh_playground
-.cpp` using CMake and run it:
+To run the Program, compile the file `eh_playground.cpp` using CMake and run it:
 
 ```bash
 mkdir build && cd build
