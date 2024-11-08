@@ -6,25 +6,32 @@ It was originally written for the ADS-Course of University of Vienna.
 ## Setup
 
 To try the Set out, a testprogram is provided (that is heavily influenced by a testprogram from the university course).
-To run the Program, compile the file `extendible_hashing.cpp` using CMake and run it:
+To run the Program, compile the file `eh_playground
+.cpp` using CMake and run it:
 
 ```bash
 mkdir build && cd build
 cmake .. && make
-./extendible_hashing
+./eh_playground
+
 ```
 
 You can also set the program to nonverbose by setting the verbose flag
 
 ```bash
-./extendible_hashing -v
-./extendible_hashing --verbose
+./eh_playground
+ -v
+./eh_playground
+ --verbose
 ```
 
 For more Information run
+
 ```bash
-./extendible_hashing -h
-./extendible_hashing --help
+./eh_playground
+ -h
+./eh_playground
+ --help
 ```
 
 ## Interface

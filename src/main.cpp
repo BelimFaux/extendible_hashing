@@ -132,7 +132,7 @@ void run(bool verbose) {
         case 'q':
             return;
         default:
-            std::cout << "unknown command\n";
+            std::cout << "unknown command. Try 'h' for more Information.\n";
         }
 
         if (verbose && changed)

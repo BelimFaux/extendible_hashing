@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
 project(
-  extendible_hashing
+  eh_playground
   VERSION 1.1
   DESCRIPTION "Playground for an Extendible Hashing datastructure."
   LANGUAGES CXX
