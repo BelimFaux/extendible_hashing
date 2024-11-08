@@ -33,6 +33,7 @@
 
 # CMake files
 compile_commands.json
+Testing
 build/*
 out/*
 .cache
