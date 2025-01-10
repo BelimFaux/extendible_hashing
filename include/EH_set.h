@@ -345,7 +345,7 @@ typename EH_set<Key, N>::size_type EH_set<Key, N>::erase(const key_type &key) {
 template <typename Key, size_t N>
 typename EH_set<Key, N>::size_type
 EH_set<Key, N>::count(const key_type &key) const {
-    return buckets[hasher{}(key) & (nD - 1)]->find(key) == N ? 0 : 1;
+    return buckets[hasher{}(key) & (nD - 1)]->find(key) != N;
 }
 
 // hash and call Bucket find
