@@ -40,3 +40,7 @@ set_property(
   TEST cli_help_long cli_help_short
   PROPERTY PASS_REGULAR_EXPRESSION "${help_regex}"
 )
+
+add_executable(ehset_utest ehset_utest.cpp)
+target_include_directories(ehset_utest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+add_test(NAME ehset_utest COMMAND ehset_utest)
