@@ -21,9 +21,9 @@
 
 using set = EH_set<unsigned>;
 
-void print_version() { std::cout << PROG_NAME << " " << PROG_VERSION << "\n"; }
+static void print_version() { std::cout << PROG_NAME << " " << PROG_VERSION << "\n"; }
 
-void print_cli_help() {
+static void print_cli_help() {
     print_version();
     std::cout << PROG_DESC << "\n\nUSAGE:\n"
               << PROG_NAME << " [OPTIONS]\n"
@@ -37,7 +37,7 @@ void print_cli_help() {
                  "command 'h'.\n";
 }
 
-void print_help() {
+static void print_help() {
     std::cout << "Help\n"
               << "  i - insert elements in set\n"
               << "  r - remove elements from set\n"
@@ -50,37 +50,39 @@ void print_help() {
               << "  q (or EOF) - quit\n";
 }
 
-std::istringstream get_input() {
+static std::istringstream get_input() {
     std::string inp;
     std::getline(std::cin, inp);
     return std::istringstream(inp);
 }
 
-void input(set* set) {
+static void input(set* set) {
     std::cout << "input> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
-    while (inp_stream >> i)
+    while (inp_stream >> i) {
         set->insert(i);
+    }
 }
 
-void remove(set* set) {
+static void remove(set* set) {
     std::cout << "remove> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
-    while (inp_stream >> i)
+    while (inp_stream >> i) {
         set->erase(i);
+    }
 }
 
-void find(set* set) {
+static void find(set* set) {
     std::cout << "find> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
     while (inp_stream >> i) {
         set::iterator it{set->find(i)};
-        if (it == set->end())
+        if (it == set->end()) {
             std::cout << i << ": element not found";
-        else {
+        } else {
             auto pos{it.get_pos()};
             std::cout << i << ": bucket: " << pos.first << ", index: " << pos.second;
         }
@@ -88,10 +90,10 @@ void find(set* set) {
     }
 }
 
-void run(bool verbose) {
+static void run(bool verbose) {
     set set{};
     bool changed{false};
-    std::string line{""};
+    std::string line{};
 
     while (std::cout << "cmd> ", std::getline(std::cin, line)) {
         changed = false;
@@ -112,8 +114,9 @@ void run(bool verbose) {
                 find(&set);
                 break;
             case 'l':
-                for (unsigned i : set)
+                for (unsigned i : set) {
                     std::cout << i << " ";
+                }
                 std::cout << '\n';
                 break;
             case 's':
@@ -135,13 +138,14 @@ void run(bool verbose) {
                 std::cout << "unknown command. Try 'h' for more Information.\n";
         }
 
-        if (verbose && changed)
+        if (verbose && changed) {
             set.dump();
+        }
     }
 }
 
 int main(int argc, char** argv) {
-    int verbose;
+    int verbose{true};
     static const struct option long_options[] = {{"verbose", no_argument, nullptr, 'v'},
                                                  {"version", no_argument, nullptr, 'V'},
                                                  {"help", no_argument, nullptr, 'h'},
