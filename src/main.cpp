@@ -1,4 +1,5 @@
 #include "EH_set.h"
+
 #include <cstdlib>
 #include <getopt.h>
 #include <iostream>
@@ -55,7 +56,7 @@ std::istringstream get_input() {
     return std::istringstream(inp);
 }
 
-void input(set *set) {
+void input(set* set) {
     std::cout << "input> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
@@ -63,7 +64,7 @@ void input(set *set) {
         set->insert(i);
 }
 
-void remove(set *set) {
+void remove(set* set) {
     std::cout << "remove> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
@@ -71,7 +72,7 @@ void remove(set *set) {
         set->erase(i);
 }
 
-void find(set *set) {
+void find(set* set) {
     std::cout << "find> ";
     std::istringstream inp_stream{get_input()};
     unsigned i;
@@ -81,8 +82,7 @@ void find(set *set) {
             std::cout << i << ": element not found";
         else {
             auto pos{it.get_pos()};
-            std::cout << i << ": bucket: " << pos.first
-                      << ", index: " << pos.second;
+            std::cout << i << ": bucket: " << pos.first << ", index: " << pos.second;
         }
         std::cout << '\n';
     }
@@ -100,39 +100,39 @@ void run(bool verbose) {
         line_stream >> cmd;
 
         switch (cmd) {
-        case 'i':
-            input(&set);
-            changed = true;
-            break;
-        case 'r':
-            remove(&set);
-            changed = true;
-            break;
-        case 'f':
-            find(&set);
-            break;
-        case 'l':
-            for (unsigned i : set)
-                std::cout << i << " ";
-            std::cout << '\n';
-            break;
-        case 's':
-            std::cout << set.size() << '\n';
-            break;
-        case 'c':
-            set.clear();
-            changed = true;
-            break;
-        case 'p':
-            set.dump();
-            break;
-        case 'h':
-            print_help();
-            break;
-        case 'q':
-            return;
-        default:
-            std::cout << "unknown command. Try 'h' for more Information.\n";
+            case 'i':
+                input(&set);
+                changed = true;
+                break;
+            case 'r':
+                remove(&set);
+                changed = true;
+                break;
+            case 'f':
+                find(&set);
+                break;
+            case 'l':
+                for (unsigned i : set)
+                    std::cout << i << " ";
+                std::cout << '\n';
+                break;
+            case 's':
+                std::cout << set.size() << '\n';
+                break;
+            case 'c':
+                set.clear();
+                changed = true;
+                break;
+            case 'p':
+                set.dump();
+                break;
+            case 'h':
+                print_help();
+                break;
+            case 'q':
+                return;
+            default:
+                std::cout << "unknown command. Try 'h' for more Information.\n";
         }
 
         if (verbose && changed)
@@ -140,35 +140,33 @@ void run(bool verbose) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     int verbose;
-    static const struct option long_options[] = {
-        {"verbose", no_argument, nullptr, 'v'},
-        {"version", no_argument, nullptr, 'V'},
-        {"help", no_argument, nullptr, 'h'},
-        {nullptr, 0, nullptr, 0}};
+    static const struct option long_options[] = {{"verbose", no_argument, nullptr, 'v'},
+                                                 {"version", no_argument, nullptr, 'V'},
+                                                 {"help", no_argument, nullptr, 'h'},
+                                                 {nullptr, 0, nullptr, 0}};
 
     int opt{'?'};
-    while ((opt = getopt_long(argc, argv, "vhV", long_options, nullptr)) !=
-           -1) {
+    while ((opt = getopt_long(argc, argv, "vhV", long_options, nullptr)) != -1) {
         switch (opt) {
-        case 0:
-            break;
-        case 'v':
-            verbose = false;
-            break;
-        case 'V':
-            print_version();
-            return EXIT_SUCCESS;
-        case 'h':
-            print_cli_help();
-            return EXIT_SUCCESS;
-        case '?':
-            std::cerr << "Try '" PROG_NAME " --help' for more information.\n";
-            return EXIT_FAILURE;
-        default:
-            std::cerr << "Error while parsing Arguments\n";
-            return EXIT_FAILURE;
+            case 0:
+                break;
+            case 'v':
+                verbose = false;
+                break;
+            case 'V':
+                print_version();
+                return EXIT_SUCCESS;
+            case 'h':
+                print_cli_help();
+                return EXIT_SUCCESS;
+            case '?':
+                std::cerr << "Try '" PROG_NAME " --help' for more information.\n";
+                return EXIT_FAILURE;
+            default:
+                std::cerr << "Error while parsing Arguments\n";
+                return EXIT_FAILURE;
         }
     }
 

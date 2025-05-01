@@ -18,8 +18,8 @@ template <typename Key, size_t N = 16> class EH_set {
     class Iterator;
     using value_type = Key;
     using key_type = Key;
-    using reference = value_type &;
-    using const_reference = const value_type &;
+    using reference = value_type&;
+    using const_reference = const value_type&;
     using size_type = size_t;
     using difference_type = std::ptrdiff_t;
     using const_iterator = Iterator;
@@ -30,19 +30,19 @@ template <typename Key, size_t N = 16> class EH_set {
   private:
     struct Bucket {
         key_type elements[N];
-        size_type l{0};     // local depth
-        size_type arrsz{0}; // number of elems in Bucket
+        size_type l{0};      // local depth
+        size_type arrsz{0};  // number of elems in Bucket
 
-        size_type append(const key_type &elem) noexcept;
-        size_type remove(const key_type &elem) noexcept;
-        [[nodiscard]] size_type find(const key_type &elem) const noexcept;
+        size_type append(const key_type& elem) noexcept;
+        size_type remove(const key_type& elem) noexcept;
+        [[nodiscard]] size_type find(const key_type& elem) const noexcept;
         [[nodiscard]] inline size_type high_bit() const noexcept;
     };
 
-    size_type sz; // actual size
-    size_type d;  // global depth
-    size_type nD; // 2^d
-    Bucket **buckets;
+    size_type sz;  // actual size
+    size_type d;   // global depth
+    size_type nD;  // 2^d
+    Bucket** buckets;
 
     void expansion() noexcept;
     void split_bucket(size_type hash) noexcept;
@@ -52,49 +52,44 @@ template <typename Key, size_t N = 16> class EH_set {
     EH_set() noexcept;
     EH_set(std::initializer_list<key_type> ilist) noexcept;
     template <typename InputIt> EH_set(InputIt first, InputIt last) noexcept;
-    EH_set(const EH_set &other) noexcept;
+    EH_set(const EH_set& other) noexcept;
 
     ~EH_set() noexcept;
 
-    EH_set &operator=(const EH_set &other) noexcept;
-    EH_set &operator=(std::initializer_list<key_type> ilist) noexcept;
+    EH_set& operator=(const EH_set& other) noexcept;
+    EH_set& operator=(std::initializer_list<key_type> ilist) noexcept;
 
     [[nodiscard]] size_type size() const noexcept;
     [[nodiscard]] bool empty() const noexcept;
 
     void insert(std::initializer_list<key_type> ilist) noexcept;
-    std::pair<iterator, bool> insert(const key_type &key) noexcept;
-    template <typename InputIt>
-    void insert(InputIt first, InputIt last) noexcept;
+    std::pair<iterator, bool> insert(const key_type& key) noexcept;
+    template <typename InputIt> void insert(InputIt first, InputIt last) noexcept;
 
     void clear() noexcept;
 
-    size_type erase(const key_type &key) noexcept;
-    [[nodiscard]] size_type count(const key_type &key) const noexcept;
-    [[nodiscard]] iterator find(const key_type &key) const noexcept;
+    size_type erase(const key_type& key) noexcept;
+    [[nodiscard]] size_type count(const key_type& key) const noexcept;
+    [[nodiscard]] iterator find(const key_type& key) const noexcept;
 
-    void swap(EH_set &other) noexcept;
+    void swap(EH_set& other) noexcept;
 
     [[nodiscard]] const_iterator begin() const noexcept;
     [[nodiscard]] const_iterator end() const noexcept;
 
-    void dump(std::ostream &o = std::cerr) const noexcept;
+    void dump(std::ostream& o = std::cerr) const noexcept;
 
     // goes through every key in lhs once and calls count for rhs
     // O(lhs.sz)
-    [[nodiscard]] friend bool operator==(const EH_set &lhs,
-                                         const EH_set &rhs) noexcept {
+    [[nodiscard]] friend bool operator==(const EH_set& lhs, const EH_set& rhs) noexcept {
         if (lhs.sz != rhs.sz)
             return false;
-        for (const auto &key : rhs)
+        for (const auto& key : rhs)
             if (!lhs.count(key))
                 return false;
         return true;
     }
-    [[nodiscard]] friend bool operator!=(const EH_set &lhs,
-                                         const EH_set &rhs) noexcept {
-        return !(lhs == rhs);
-    }
+    [[nodiscard]] friend bool operator!=(const EH_set& lhs, const EH_set& rhs) noexcept { return !(lhs == rhs); }
 };
 
 /*--------------------------Bucket methods----------------------------*/
@@ -103,8 +98,7 @@ template <typename Key, size_t N = 16> class EH_set {
 // returns 1 if Element could be inserted, 0 otherwise
 // O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type
-EH_set<Key, N>::Bucket::append(const key_type &elem) noexcept {
+typename EH_set<Key, N>::size_type EH_set<Key, N>::Bucket::append(const key_type& elem) noexcept {
     if (arrsz == N)
         return 0;
     elements[arrsz++] = elem;
@@ -115,8 +109,7 @@ EH_set<Key, N>::Bucket::append(const key_type &elem) noexcept {
 // returns index of Element in Bucket, if found, and N otherwise
 // O(N) = O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type
-EH_set<Key, N>::Bucket::find(const key_type &elem) const noexcept {
+typename EH_set<Key, N>::size_type EH_set<Key, N>::Bucket::find(const key_type& elem) const noexcept {
     for (size_type i{0}; i < arrsz; ++i)
         if (key_equal{}(elem, elements[i]))
             return i;
@@ -127,8 +120,7 @@ EH_set<Key, N>::Bucket::find(const key_type &elem) const noexcept {
 // swap with last element and decrease size
 // O(N) = O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type
-EH_set<Key, N>::Bucket::remove(const key_type &elem) noexcept {
+typename EH_set<Key, N>::size_type EH_set<Key, N>::Bucket::remove(const key_type& elem) noexcept {
     for (size_type i{0}; i < arrsz; ++i)
         if (key_equal{}(elem, elements[i])) {
             if (i != --arrsz)
@@ -140,8 +132,7 @@ EH_set<Key, N>::Bucket::remove(const key_type &elem) noexcept {
 
 // returns highest bit that bucket elems agree on
 template <typename Key, size_t N>
-inline typename EH_set<Key, N>::size_type
-EH_set<Key, N>::Bucket::high_bit() const noexcept {
+inline typename EH_set<Key, N>::size_type EH_set<Key, N>::Bucket::high_bit() const noexcept {
     return 1 << l;
 }
 
@@ -150,16 +141,15 @@ EH_set<Key, N>::Bucket::high_bit() const noexcept {
 // May call expansion and split multiple times
 // O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::iterator EH_set<Key, N>::add(key_type k,
-                                                      bool check) noexcept {
+typename EH_set<Key, N>::iterator EH_set<Key, N>::add(key_type k, bool check) noexcept {
     size_type hash = hasher{}(k) & (nD - 1);
     size_type idx{0};
     if (check && (idx = buckets[hash]->find(k)) != N)
-        return iterator(idx, hash, this); // if already inside, skip
+        return iterator(idx, hash, this);  // if already inside, skip
 
-    while (true) { // while key can't be inserted
+    while (true) {                         // while key can't be inserted
         if (buckets[hash]->append(k)) {
-            sz++; // successful insert
+            sz++;                          // successful insert
             return iterator(buckets[hash]->arrsz - 1, hash, this);
         } else {
             // bucket overflow, split (and expansion) necessary
@@ -173,10 +163,10 @@ typename EH_set<Key, N>::iterator EH_set<Key, N>::add(key_type k,
 // O(1)
 template <typename Key, size_t N> void EH_set<Key, N>::expansion() noexcept {
     size_type new_nD = 1 << ++d;
-    Bucket **new_buckets{new Bucket *[new_nD]};
+    Bucket** new_buckets{new Bucket*[new_nD]};
     for (size_type i{0}; i < nD; ++i) {
         new_buckets[i] = buckets[i];
-        new_buckets[i + nD] = buckets[i]; // pointer repeat with offset nD
+        new_buckets[i + nD] = buckets[i];  // pointer repeat with offset nD
     }
     delete[] buckets;
     buckets = new_buckets;
@@ -185,32 +175,27 @@ template <typename Key, size_t N> void EH_set<Key, N>::expansion() noexcept {
 
 // Split Bucket buckets[hash] and reassign pointers
 // O(N) = O(1)
-template <typename Key, size_t N>
-void EH_set<Key, N>::split_bucket(size_type hash) noexcept {
-    Bucket *b = buckets[hash];
-    if (b->l >= d) // ensure there is enough space to split
+template <typename Key, size_t N> void EH_set<Key, N>::split_bucket(size_type hash) noexcept {
+    Bucket* b = buckets[hash];
+    if (b->l >= d)  // ensure there is enough space to split
         expansion();
 
-    b->arrsz = 0;             // clear Bucket
-    Bucket *b1{new Bucket{}}; // 1 prefix
-    b1->l = ++b->l;           // l increases by 1
+    b->arrsz = 0;              // clear Bucket
+    Bucket* b1{new Bucket{}};  // 1 prefix
+    b1->l = ++b->l;            // l increases by 1
 
     // rehash every Element from original Bucket
     // only the l+1 least significant bit must be checked, so rbitshift by l and
     // test if bit is set no temp copy needed, since we always check after newly
     // added elements
     for (size_type i{0}; i < N; ++i)
-        (hasher{}(b->elements[i])) >> (b->l - 1) & 1
-            ? b1->append(b->elements[i])
-            : b->append(b->elements[i]);
+        (hasher{}(b->elements[i])) >> (b->l - 1) & 1 ? b1->append(b->elements[i]) : b->append(b->elements[i]);
 
     // get first index that should point to new Bucket (first pointer points to
     // Original, so first pointer + offset points to new)
     size_type offset{1ULL << (b->l - 1)};
-    size_type first{
-        (hash & (offset - 1)) +
-        offset}; // first Pointer from original Bucket is hash value % offset
-    offset += offset; // double old offset (offset for new buckets)
+    size_type first{(hash & (offset - 1)) + offset};  // first Pointer from original Bucket is hash value % offset
+    offset += offset;                                 // double old offset (offset for new buckets)
 
     // assign every pointer that should point to new Bucket (2 * original
     // offset)
@@ -222,9 +207,7 @@ void EH_set<Key, N>::split_bucket(size_type hash) noexcept {
 
 // create empty set (empty set contains 1 Bucket)
 // O(1)
-template <typename Key, size_t N>
-EH_set<Key, N>::EH_set() noexcept
-    : sz{0}, d{0}, nD{1}, buckets{new Bucket *[nD]} {
+template <typename Key, size_t N> EH_set<Key, N>::EH_set() noexcept : sz{0}, d{0}, nD{1}, buckets{new Bucket*[nD]} {
     for (size_t i{0}; i < nD; ++i)
         buckets[i] = new Bucket{};
 }
@@ -232,8 +215,7 @@ EH_set<Key, N>::EH_set() noexcept
 // calls it Constructor
 // O(list size)
 template <typename Key, size_t N>
-EH_set<Key, N>::EH_set(std::initializer_list<key_type> ilist) noexcept
-    : EH_set{std::begin(ilist), std::end(ilist)} {}
+EH_set<Key, N>::EH_set(std::initializer_list<key_type> ilist) noexcept : EH_set{std::begin(ilist), std::end(ilist)} {}
 
 // calls list insert
 // O(it range)
@@ -246,8 +228,8 @@ EH_set<Key, N>::EH_set(InputIt first, InputIt last) noexcept : EH_set{} {
 // copies all elements from other set
 // O(other.nD)
 template <typename Key, size_t N>
-EH_set<Key, N>::EH_set(const EH_set &other) noexcept
-    : sz{other.sz}, d{other.d}, nD{other.nD}, buckets{new Bucket *[nD]} {
+EH_set<Key, N>::EH_set(const EH_set& other) noexcept
+    : sz{other.sz}, d{other.d}, nD{other.nD}, buckets{new Bucket*[nD]} {
     for (size_t i{0}; i < nD; ++i) {
         if (other.buckets[i]->high_bit() > i) {
             buckets[i] = new Bucket{*other.buckets[i]};
@@ -269,22 +251,19 @@ template <typename Key, size_t N> EH_set<Key, N>::~EH_set() noexcept {
 
 // clear all values, without losing structure and insert keys
 // O(nD + other.sz)
-template <typename Key, size_t N>
-EH_set<Key, N> &
-EH_set<Key, N>::operator=(const EH_set<Key, N> &other) noexcept {
+template <typename Key, size_t N> EH_set<Key, N>& EH_set<Key, N>::operator=(const EH_set<Key, N>& other) noexcept {
     for (size_type i{0}; i < nD; ++i)
         buckets[i & (nD - 1)]->arrsz = 0;
     sz = 0;
-    for (const key_type &key : other)
-        add(key, false); // insert without checking the values
+    for (const key_type& key : other)
+        add(key, false);  // insert without checking the values
     return *this;
 }
 
 // clears all values, without losing structur and inserts ilist
 // O(nD + list size)
 template <typename Key, size_t N>
-EH_set<Key, N> &
-EH_set<Key, N>::operator=(std::initializer_list<key_type> ilist) noexcept {
+EH_set<Key, N>& EH_set<Key, N>::operator=(std::initializer_list<key_type> ilist) noexcept {
     for (size_type i{0}; i < nD; ++i)
         buckets[i]->arrsz = 0;
     sz = 0;
@@ -293,19 +272,15 @@ EH_set<Key, N>::operator=(std::initializer_list<key_type> ilist) noexcept {
 }
 
 // O(1)
-template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type EH_set<Key, N>::size() const noexcept {
+template <typename Key, size_t N> typename EH_set<Key, N>::size_type EH_set<Key, N>::size() const noexcept {
     return sz;
 }
 // O(1)
-template <typename Key, size_t N> bool EH_set<Key, N>::empty() const noexcept {
-    return (sz == 0);
-}
+template <typename Key, size_t N> bool EH_set<Key, N>::empty() const noexcept { return (sz == 0); }
 
 // insert list: calls iterator insert
 // O(list size)
-template <typename Key, size_t N>
-void EH_set<Key, N>::insert(std::initializer_list<key_type> ilist) noexcept {
+template <typename Key, size_t N> void EH_set<Key, N>::insert(std::initializer_list<key_type> ilist) noexcept {
     if (!ilist.size())
         return;
     insert(std::begin(ilist), std::end(ilist));
@@ -314,8 +289,7 @@ void EH_set<Key, N>::insert(std::initializer_list<key_type> ilist) noexcept {
 // calls private method add
 // O(1)
 template <typename Key, size_t N>
-std::pair<typename EH_set<Key, N>::iterator, bool>
-EH_set<Key, N>::insert(const key_type &key) noexcept {
+std::pair<typename EH_set<Key, N>::iterator, bool> EH_set<Key, N>::insert(const key_type& key) noexcept {
     size_type old_sz{sz};
     return {add(key), (old_sz != sz)};
 }
@@ -339,8 +313,7 @@ template <typename Key, size_t N> void EH_set<Key, N>::clear() noexcept {
 // hash and call Bucket remove
 // O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type
-EH_set<Key, N>::erase(const key_type &key) noexcept {
+typename EH_set<Key, N>::size_type EH_set<Key, N>::erase(const key_type& key) noexcept {
     if (buckets[hasher{}(key) & (nD - 1)]->remove(key)) {
         --sz;
         return 1;
@@ -351,24 +324,21 @@ EH_set<Key, N>::erase(const key_type &key) noexcept {
 // hash and call Bucket find
 // O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::size_type
-EH_set<Key, N>::count(const key_type &key) const noexcept {
+typename EH_set<Key, N>::size_type EH_set<Key, N>::count(const key_type& key) const noexcept {
     return buckets[hasher{}(key) & (nD - 1)]->find(key) != N;
 }
 
 // hash and call Bucket find
 // O(1)
 template <typename Key, size_t N>
-typename EH_set<Key, N>::iterator
-EH_set<Key, N>::find(const key_type &key) const noexcept {
+typename EH_set<Key, N>::iterator EH_set<Key, N>::find(const key_type& key) const noexcept {
     size_type idx = buckets[hasher{}(key) & (nD - 1)]->find(key);
     return idx != N ? iterator(idx, hasher{}(key) & (nD - 1), this) : end();
 }
 
 // just uses std::swap for every instance variable
 // O(1)
-template <typename Key, size_t N>
-void EH_set<Key, N>::swap(EH_set &other) noexcept {
+template <typename Key, size_t N> void EH_set<Key, N>::swap(EH_set& other) noexcept {
     using std::swap;
     swap(d, other.d);
     swap(nD, other.nD);
@@ -378,33 +348,29 @@ void EH_set<Key, N>::swap(EH_set &other) noexcept {
 
 // begin-iterator is first element of first Bucket
 // O(1)
-template <typename Key, size_t N>
-typename EH_set<Key, N>::const_iterator EH_set<Key, N>::begin() const noexcept {
+template <typename Key, size_t N> typename EH_set<Key, N>::const_iterator EH_set<Key, N>::begin() const noexcept {
     return const_iterator(0, 0, this);
 }
 // end-iterator is first element of (nonexistent) nDth Bucket
 // O(1)
-template <typename Key, size_t N>
-typename EH_set<Key, N>::const_iterator EH_set<Key, N>::end() const noexcept {
+template <typename Key, size_t N> typename EH_set<Key, N>::const_iterator EH_set<Key, N>::end() const noexcept {
     return const_iterator(this);
 }
 
 // Outputs entire set to ostream
-template <typename Key, size_t N>
-void EH_set<Key, N>::dump(std::ostream &o) const noexcept {
-    o << "Extendible Hashing <" << typeid(Key).name() << ',' << N
-      << ">, d = " << d << ", nD = " << nD << ", sz = " << sz << '\n';
+template <typename Key, size_t N> void EH_set<Key, N>::dump(std::ostream& o) const noexcept {
+    o << "Extendible Hashing <" << typeid(Key).name() << ',' << N << ">, d = " << d << ", nD = " << nD
+      << ", sz = " << sz << '\n';
     // printing...
     for (size_type i{0}; i < nD; ++i) {
-        Bucket *b = buckets[i];
+        Bucket* b = buckets[i];
         size_type orig_bucket = i & (buckets[i]->high_bit() - 1);
         o << i;
         if (orig_bucket != i)
-            o << " ~~> " << orig_bucket; // if pointer isnt first to a bucket
-                                         // show reference to first Bucket
+            o << " ~~> " << orig_bucket;  // if pointer isnt first to a bucket
+                                          // show reference to first Bucket
         o << " --> [l = ";
-        o << b->l << ", offset = " << (1 << b->l) << ", arrsz = " << b->arrsz
-          << " | ";
+        o << b->l << ", offset = " << (1 << b->l) << ", arrsz = " << b->arrsz << " | ";
         for (size_type j{0}; j < b->arrsz; ++j)
             o << b->elements[j] << ' ';
         o << "]\n";
@@ -417,22 +383,21 @@ template <typename Key, size_t N> class EH_set<Key, N>::Iterator {
   public:
     using value_type = Key;
     using difference_type = std::ptrdiff_t;
-    using reference = const value_type &;
-    using pointer = const value_type *;
+    using reference = const value_type&;
+    using pointer = const value_type*;
     using iterator_category = std::forward_iterator_tag;
 
   private:
     size_type idx{0};
-    const EH_set *set{nullptr};
+    const EH_set* set{nullptr};
     size_type b{0};
 
     // skip to the next, first ptr, that is the first occurence, to point to a
     // non-empty Bucket
     void skip() noexcept {
-        while (b >= set->buckets[b]->high_bit() ||
-               set->buckets[b]->arrsz == 0) {
+        while (b >= set->buckets[b]->high_bit() || set->buckets[b]->arrsz == 0) {
             b++;
-            if (is_end()) // if we are at the end ptr, dont increase anymore
+            if (is_end())  // if we are at the end ptr, dont increase anymore
                 break;
         }
     }
@@ -441,32 +406,29 @@ template <typename Key, size_t N> class EH_set<Key, N>::Iterator {
     [[nodiscard]] bool is_end() const noexcept { return b == set->nD; }
 
     // returns a pointer to the current element
-    [[nodiscard]] pointer ptr() const noexcept {
-        return &set->buckets[b]->elements[idx];
-    }
+    [[nodiscard]] pointer ptr() const noexcept { return &set->buckets[b]->elements[idx]; }
 
   public:
-    explicit Iterator(size_type idx, size_type b, const EH_set *set) noexcept
+    explicit Iterator(size_type idx, size_type b, const EH_set* set) noexcept
         : idx{idx}, set{set}, b{b & (set->buckets[b]->high_bit() - 1)} {
         skip();
     }
 
-    Iterator(const EH_set *set) noexcept
-        : idx{0}, set{set}, b{set->nD} {} // for end-iterator
+    Iterator(const EH_set* set) noexcept : idx{0}, set{set}, b{set->nD} {}  // for end-iterator
     Iterator() noexcept : idx{0}, set{nullptr}, b{0} {}
 
     [[nodiscard]] reference operator*() const noexcept { return *ptr(); }
     [[nodiscard]] pointer operator->() const noexcept { return ptr(); }
 
-    Iterator &operator++() noexcept {
+    Iterator& operator++() noexcept {
         if (++idx < set->buckets[b]->arrsz)
             return *this;
 
         // if we are at the end of current bucket
         idx = 0;
         ++b;
-        if (b != set->nD) // if we are at the end ptr, dont skip
-            skip();       // skip to next valid ptr
+        if (b != set->nD)  // if we are at the end ptr, dont skip
+            skip();        // skip to next valid ptr
         return *this;
     }
 
@@ -480,23 +442,15 @@ template <typename Key, size_t N> class EH_set<Key, N>::Iterator {
     // Bucker}, for debugging
     std::pair<unsigned, unsigned> get_pos() const noexcept { return {b, idx}; }
 
-    [[nodiscard]] friend bool operator==(const Iterator &lhs,
-                                         const Iterator &rhs) noexcept {
-        if (lhs.is_end() || rhs.is_end()) // if one of the iterators is the end
-                                          // iterator, test if both are
+    [[nodiscard]] friend bool operator==(const Iterator& lhs, const Iterator& rhs) noexcept {
+        if (lhs.is_end() || rhs.is_end())  // if one of the iterators is the end
+                                           // iterator, test if both are
             return lhs.is_end() && rhs.is_end();
-        return (lhs.ptr() ==
-                rhs.ptr()); // test if they point to the same element
+        return (lhs.ptr() == rhs.ptr());   // test if they point to the same element
     }
-    [[nodiscard]] friend bool operator!=(const Iterator &lhs,
-                                         const Iterator &rhs) noexcept {
-        return !(lhs == rhs);
-    }
+    [[nodiscard]] friend bool operator!=(const Iterator& lhs, const Iterator& rhs) noexcept { return !(lhs == rhs); }
 };
 
-template <typename Key, size_t N>
-void swap(EH_set<Key, N> &lhs, EH_set<Key, N> &rhs) noexcept {
-    lhs.swap(rhs);
-}
+template <typename Key, size_t N> void swap(EH_set<Key, N>& lhs, EH_set<Key, N>& rhs) noexcept { lhs.swap(rhs); }
 
-#endif // EH_SET_H
+#endif  // EH_SET_H

@@ -1,4 +1,5 @@
 #include "EH_set.h"
+
 #include <algorithm>
 #include <cstddef>
 #include <functional>
@@ -16,24 +17,20 @@ struct double_w {
 
     double_w(double val) : val{val} {}
     double_w() = default;
-    double_w(double_w const &) = default;
-    double_w &operator=(double_w const &) = default;
+    double_w(double_w const&) = default;
+    double_w& operator=(double_w const&) = default;
 };
 
 namespace std {
 template <> struct hash<double_w> {
-    size_t operator()(double_w const &dw) const {
-        return std::hash<double>{}(dw.val);
-    }
+    size_t operator()(double_w const& dw) const { return std::hash<double>{}(dw.val); }
 };
 
 template <> struct equal_to<double_w> {
-    bool operator()(double_w const &lhs, double_w const &rhs) const {
-        return lhs.val == rhs.val;
-    }
+    bool operator()(double_w const& lhs, double_w const& rhs) const { return lhs.val == rhs.val; }
 };
 
-} // namespace std
+}  // namespace std
 
 TEST_SUITE("EH_set") {
 
@@ -219,15 +216,14 @@ TEST_SUITE("EH_set") {
         std::vector<T> copy{};
         copy.reserve(set.size());
 
-        for (const T &i : set) {
+        for (const T& i : set) {
             CHECK(set.count(i));
             copy.push_back(i);
         }
 
         auto last = std::unique(copy.begin(), copy.end(), std::equal_to<T>{});
         copy.erase(last, copy.end());
-        CHECK_MESSAGE(copy.size() == set.size(),
-                      "Iterator yields duplicate values");
+        CHECK_MESSAGE(copy.size() == set.size(), "Iterator yields duplicate values");
     }
 
     TEST_CASE_TEMPLATE("DuplicateValues", T, double, double_w) {
@@ -272,7 +268,7 @@ TEST_SUITE("EH_set") {
         set.insert(vals.begin(), vals.end());
         CHECK_EQ(set.size(), NUM);
 
-        for (const T &i : vals) {
+        for (const T& i : vals) {
             CHECK_NE(set.find(i), set.end());
         }
     }
@@ -294,7 +290,7 @@ TEST_SUITE("EH_set") {
             vals.erase(it);
         }
 
-        for (const T &i : vals) {
+        for (const T& i : vals) {
             CHECK_NE(set.find(i), set.end());
         }
     }
