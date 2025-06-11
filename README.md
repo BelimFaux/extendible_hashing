@@ -18,19 +18,15 @@ cmake .. && make
 You can also set the program to nonverbose by setting the verbose flag
 
 ```bash
-./eh_playground
- -v
-./eh_playground
- --verbose
+./eh_playground -v
+./eh_playground --verbose
 ```
 
 For more Information run
 
 ```bash
-./eh_playground
- -h
-./eh_playground
- --help
+./eh_playground -h
+./eh_playground --help
 ```
 
 ## Commands
