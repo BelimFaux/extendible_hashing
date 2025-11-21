@@ -1,5 +1,8 @@
 # Extendible Hashing
 
+> ![WARNING]
+> This repo was moved to [https://codeberg.org/belim_faux/extendible_hashing](https://codeberg.org/belim_faux/extendible_hashing)
+
 This is a C++ Implementation of an Extendible Hashing Set.  
 It was originally written for the ADS-Course of University of Vienna.
 
