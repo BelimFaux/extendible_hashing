@@ -1,6 +1,6 @@
 # Extendible Hashing
 
-> ![WARNING]
+> [!WARNING]
 > This repo was moved to [https://codeberg.org/belim_faux/extendible_hashing](https://codeberg.org/belim_faux/extendible_hashing)
 
 This is a C++ Implementation of an Extendible Hashing Set.  
